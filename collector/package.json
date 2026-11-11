@@ -1,0 +1,26 @@
+{
+  "name": "collector",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+  "dev": "tsx watch src/server.ts",
+  "typecheck": "tsc --noEmit",
+  "start": "tsx src/server.ts"
+ },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dockerode": "^5.0.1",
+    "dotenv": "^18.0.9",
+    "mongodb": "^7.8.0"
+  },
+  "devDependencies": {
+    "@types/dockerode": "^4.0.2",
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
