@@ -1,38 +1,37 @@
 
-import { MongoClient, Db } from "mongodb";
+import {
+  MongoClient,
+  type Db
+} from "mongodb";
 
-let client: MongoClient;
-let database: Db;
+let client: MongoClient | null = null;
+let database: Db | null = null;
 
 export async function connectDatabase(): Promise<Db> {
   const uri = process.env.MONGO_URI;
-  const databaseName = process.env.MONGO_DATABASE || "docker_monitoring";
+  const databaseName =
+    process.env.MONGO_DATABASE || "docker_monitor";
 
   if (!uri) {
-    throw new Error("MONGO_URI is missing from .env");
+    throw new Error("MONGO_URI is missing");
   }
 
-  try {
-    client = new MongoClient(uri);
+  client = new MongoClient(uri);
 
-    await client.connect();
+  await client.connect();
 
-    database = client.db(databaseName);
+  database = client.db(databaseName);
 
-    await database.command({ ping: 1 });
+  await database.command({ ping: 1 });
 
-    console.log("MongoDB Atlas connected successfully");
+  console.log("MongoDB connected successfully");
 
-    return database;
-  } catch (error) {
-    console.error("MongoDB connection failed:", error);
-    throw error;
-  }
+  return database;
 }
 
 export function getDatabase(): Db {
   if (!database) {
-    throw new Error("Database is not connected");
+    throw new Error("MongoDB is not connected");
   }
 
   return database;
@@ -41,6 +40,8 @@ export function getDatabase(): Db {
 export async function closeDatabase(): Promise<void> {
   if (client) {
     await client.close();
+    client = null;
+    database = null;
     console.log("MongoDB connection closed");
   }
 }
